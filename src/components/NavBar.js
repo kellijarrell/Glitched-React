@@ -13,7 +13,7 @@ function NavBar() {
       <a
         id="nav"
         className="navbar-brand"
-        href="/homepage">
+        href="/Glitched-React/homepage">
         <img
           src={logo}
           width="auto"
