@@ -39,14 +39,6 @@ function Homepage() {
     ]
     return (
         <div>
-            {/* <section id="home"
-                className="jumbotron  jumbotron-fluid"
-                style={{ textAlign: "center" }}>
-                <div className="container">
-                    <img src={NamePlate} style={{ height: "auto", width: "60%" }} />
-
-                </div>
-            </section> */}
 
 
                     <div className="user">

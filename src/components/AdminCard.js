@@ -7,7 +7,7 @@ function AdminCard(props) {
 
     <div className="card mx-auto" style={{ width: "18rem" }}>
       <img src={props.userImage} className="card-img-top circle-img" alt="..." />
-      <div className="card-body">
+      <div className="card-body" >
         <h5 className="card-title">{props.userName}</h5>
         <p className="card-text">{props.description}
           <a href="#" >
