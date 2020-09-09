@@ -7,33 +7,37 @@ import Messages from "./components/pages/Messages";
 import "./components/assets/all-pages-style.css";
 import Login from "./components/pages/Login";
 import SignUp from "./components/pages/SignUp"
-import UserInfo from "./components/pages/UserInfo";
 
 const firebase = require("firebase/app");
 require("firebase/auth");
 require("firebase/database");
 
+
 function App() {
 
     const firebaseConfig = {
-        apiKey: process.env.apiKey,
-        authDomain: process.env.authDomain,
-        databaseURL: process.env.databaseURL,
-        projectId: process.env.projectId,
-        storageBucket: process.env.storageBucket,
-        messagingSenderId: process.env.messagingSenderId,
-        appId: process.env.appId,
-        measurementId: process.env.measurementId
+        apiKey: process.env.REACT_APP_apiKey,
+        authDomain: process.env.REACT_APP_authDomain,
+        databaseURL: process.env.REACT_APP_databaseURL,
+        projectId: process.env.REACT_APP_projectId,
+        storageBucket: process.env.REACT_APP_storageBucket,
+        messagingSenderId: process.env.REACT_APP_messagingSenderId,
+        appId: process.env.REACT_APP_appId,
+        measurementId: process.env.REACT_APP_measurementId
     };
 
     firebase.initializeApp(firebaseConfig);
 
     const signUpUser = (email, password) => {
+        console.log(email, " ", password);
         firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(errorCode, errorMessage);
         });
+        signInUser(email, password);
+
+
     }
 
     const signInUser = (email, password) => {
@@ -46,14 +50,17 @@ function App() {
 
     return (
         <Router>
+            {console.log("ENV: ", process.env)}
             <div>
                 <NavBar />
                 <Route exact path="/Glitched-React/homepage" component={Homepage} />
                 <Route exact path="/Glitched-React/messages" component={Messages} />
                 <Route exact path="/Glitched-React/admin" component={Admin} />
                 <Route exact path="/Glitched-React/login" component={Login} />
-                <Route exact path="/Glitched-React/signup" component={SignUp} />
-                <Route exact path="/Glitched-React/userinfo" component={UserInfo} />
+                <Route exact path="/Glitched-React/signup" render={
+                    (props) => (
+                        <SignUp signUpUser={signUpUser}/>
+                )}/>
 
 
             </div>
