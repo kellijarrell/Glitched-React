@@ -22,6 +22,8 @@ function Card(props) {
 
     <div className="user__card">
       <div className="user__card__top blue">
+        <h5 style={{textAlign: "center", color:"white"}}>Swipe Right to <span style={{ color:"#B1DA96"}}>Match</span> <br></br> Swipe Left to <span style={{ color:"#c01a1a"}}>Pass</span></h5>
+        <br></br>
         <div className="user__card__img">
           <img src={props.image} className="card-circle-img" alt="..." />
 
