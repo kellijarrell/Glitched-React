@@ -7,6 +7,7 @@ import Messages from "./components/pages/Messages";
 import "./components/assets/all-pages-style.css";
 import Login from "./components/pages/Login";
 import SignUp from "./components/pages/SignUp"
+import UserInfo from "./components/pages/UserInfo";
 
 const firebase = require("firebase/app");
 require("firebase/auth");
@@ -52,6 +53,7 @@ function App() {
                 <Route exact path="/Glitched-React/admin" component={Admin} />
                 <Route exact path="/Glitched-React/login" component={Login} />
                 <Route exact path="/Glitched-React/signup" component={SignUp} />
+                <Route exact path="/Glitched-React/userinfo" component={UserInfo} />
 
 
             </div>
