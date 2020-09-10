@@ -48,7 +48,6 @@ function App() {
                 } else {
                     // Existing user redirect
                     if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) { setCurrentUserInfo(userData) };
-                    // window.location.href = window.location.origin+"/Glitched-React/homepage";
                 }
             });
         } else {
@@ -119,7 +118,7 @@ function App() {
                     )} />
                 <Route exact path="/Glitched-React/messages" component={Messages} />
                 <Route exact path="/Glitched-React/admin" component={Admin} />
-                <Route exact path="/Glitched-React/login" render={
+                <Route exact path="/Glitched-React/" render={
                     (props) => (
                         <Login signInUser={signInUser} />
                     )} />
