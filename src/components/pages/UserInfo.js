@@ -1,4 +1,5 @@
 import React from "react";
+import DisplayImage from "../DisplayImage";
 
 function UserInfo(props) {
 
@@ -110,6 +111,9 @@ function UserInfo(props) {
               <option>Non-Binary</option>
               <option>Not Specific</option>
             </select>
+          </div>
+          <div className="col-md-6 mb-3">
+            <DisplayImage></DisplayImage>
           </div>
         </div>
         <button className="btn btn-info" 
