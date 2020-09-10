@@ -42,9 +42,13 @@ function App() {
             firebase.database().ref('/users/' + userId).once('value').then(function (snapshot) {
                 const userData = snapshot.val();
                 if (userData === null) {
+                    // New user redirect
                     initializeUser(user.email)
+                    window.location.href = window.location.origin+"/Glitched-React/userinfo";
                 } else {
+                    // Existing user redirect
                     if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) { setCurrentUserInfo(userData) };
+                    // window.location.href = window.location.origin+"/Glitched-React/homepage";
                 }
             });
         } else {
@@ -69,7 +73,7 @@ function App() {
 
     const setUserInfo = (fname, lname, city, state, zip, gender, preference, url) => {
         firebase.database().ref('zip/').child(currentUser.uid).remove();
-        firebase.database().ref('users/' + currentUser.uid).set({
+        firebase.database().ref('users/personal' + currentUser.uid).set({
             email: currentUser.email,
             first_name: fname,
             last_name: lname,
@@ -80,7 +84,7 @@ function App() {
             preference: preference,
             profile_picture: url
         });
-        firebase.database().ref('zip/' + gender + "/prefers_" + preference + "/" + currentUser.uid).set({
+        firebase.database().ref('zip/' + zip + "/" + gender + "/prefers_" + preference + "/" + currentUser.uid).set({
             likes: "anime"
         });
     }
