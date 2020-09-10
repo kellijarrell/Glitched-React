@@ -8,6 +8,7 @@ import "./components/assets/all-pages-style.css";
 import Login from "./components/pages/Login";
 import SignUp from "./components/pages/SignUp"
 import UserInfo from "./components/pages/UserInfo";
+import Matching from "./components/pages/Matching";
 
 const firebase = require("firebase/app");
 require("firebase/auth");
@@ -55,6 +56,7 @@ function App() {
             <div>
                 <NavBar />
                 <Route exact path="/Glitched-React/homepage" component={Homepage} />
+                <Route exact path="/Glitched-React/matched" component={Matching} />
                 <Route exact path="/Glitched-React/userinfo" component={UserInfo}/>
                 <Route exact path="/Glitched-React/messages" component={Messages} />
                 <Route exact path="/Glitched-React/admin" component={Admin} />
