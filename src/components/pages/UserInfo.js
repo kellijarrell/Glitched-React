@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import DisplayImage from "../DisplayImage";
 
 function UserInfo(props) {
@@ -8,25 +8,71 @@ function UserInfo(props) {
   const city = useRef();
   const state = useRef();
   const zip = useRef();
-  const password = useRef();
+  const gender = useRef();
+  const preference = useRef();
+  const [imgBlob, setImg] = useState("");
+
+  const [formState, setFormState] = useState({
+    fname: null,
+    lname: null,
+    city: null,
+    state: null,
+    zip: null,
+    gender: null,
+    preference: null
+  })
+
+  function handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    setFormState({
+      ...formState,
+      [name]: value
+    });
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    props.setUserInfo(
+      fname.current.value, 
+      lname.current.value,
+      city.current.value,
+      state.current.value, 
+      zip.current.value,
+      gender.current.value,
+      preference.current.value,
+      imgBlob)
+  }
 
   return (
     <div className="container mx-auto" style={{ margin: "40px", maxWidth: "500px" }}>
-      <div>
+      <form onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="col-md-6 mb-3">
             <label htmlFor="validationDefault01">First name</label>
             <input type="text"
               className="form-control"
               id="validationDefault01"
-              placeholder="Jane" required />
+              placeholder="Jane"
+              ref={fname}
+              name="fname"
+              value={formState.fname || props.first_name || ""}
+              onChange={handleInputChange}
+              required></input>
           </div>
           <div className="col-md-6 mb-3">
             <label htmlFor="validationDefault02">Last name</label>
             <input type="text"
               className="form-control"
               id="validationDefault02"
-              placeholder="Doe" required />
+              placeholder="Doe"
+              ref={lname}
+              name="lname"
+              value={formState.lname || props.last_name || ""}
+              onChange={handleInputChange}
+              required />
           </div>
         </div>
         <div className="form-row">
@@ -35,11 +81,23 @@ function UserInfo(props) {
             <input type="text"
               className="form-control"
               placeholder="Savannah"
-              id="validationDefault03" required />
+              id="validationDefault03"
+              ref={city}
+              name="city"
+              value={formState.city || props.city || ""}
+              onChange={handleInputChange}
+              required />
           </div>
           <div className="col-md-3 mb-3">
             <label htmlFor="validationDefault04">State</label>
-            <select className="custom-select" id="validationDefault04" required style={{ overflow: "hidden" }}>
+            <select className="custom-select"
+              id="validationDefault04"
+              ref={state}
+              name="state"
+              value={formState.state || props.state || ""}
+              onChange={handleInputChange}
+              required
+              style={{ overflow: "hidden" }}>
               <option disabled value="">Choose...</option>
               <option>AL</option>
               <option>AK</option>
@@ -98,11 +156,23 @@ function UserInfo(props) {
             <input type="text"
               className="form-control"
               placeholder="31407"
-              id="validationDefault05" required />
+              id="validationDefault05"
+              ref={zip}
+              name="zip"
+              value={formState.zip || props.zip || ""}
+              onChange={handleInputChange}
+              required />
           </div>
           <div className="col-md-6 mb-3">
             <label htmlFor="validationDefault04">I Am....</label>
-            <select className="custom-select" id="validationDefault04" required style={{ overflow: "hidden" }}>
+            <select className="custom-select"
+              id="validationDefault04"
+              ref={gender}
+              name="gender"
+              value={formState.gender || props.gender || ""}
+              onChange={handleInputChange}
+              required 
+              style={{ overflow: "hidden" }}>
               <option disabled value="">Gender</option>
               <option>Male</option>
               <option>Female</option>
@@ -111,7 +181,14 @@ function UserInfo(props) {
           </div>
           <div className="col-md-6 mb-3">
             <label htmlFor="validationDefault04">Looking for....</label>
-            <select className="custom-select" id="validationDefault04" required style={{ overflow: "hidden" }}>
+            <select className="custom-select" 
+              id="validationDefault04"
+              ref={preference}
+              name="preference"
+              value={formState.preference || props.preference || ""}
+              onChange={handleInputChange}
+              required 
+              style={{ overflow: "hidden" }}>
               <option disabled value="">Gender</option>
               <option>Male</option>
               <option>Female</option>
@@ -120,12 +197,11 @@ function UserInfo(props) {
             </select>
           </div>
           <div className="col-md-6 mb-3">
-            <DisplayImage storage={props.storage}></DisplayImage>
+            <DisplayImage currentImg={props.profile_picture} setImg={setImg}></DisplayImage>
           </div>
         </div>
-        <button className="btn btn-info" 
-        type="submit">Add Info</button>
-      </div>
+        <button className="btn btn-info">Confirm Info</button>
+      </form>
     </div>
   )
 }

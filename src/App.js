@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Homepage from "./components/pages/Homepage";
@@ -15,7 +15,6 @@ require("firebase/auth");
 require("firebase/database");
 require("firebase/storage")
 
-
 function App() {
 
     const firebaseConfig = {
@@ -29,19 +28,23 @@ function App() {
         measurementId: process.env.REACT_APP_measurementId
     };
 
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
 
-    const storage = firebase.storage();
-    let currentUser;
+    const [currentUser, setCurrentUser] = useState({});
+    const [currentUserInfo, setCurrentUserInfo] = useState({ first_name: null });
 
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-            currentUser = user;
+            setCurrentUser(user);
             const userId = user.uid;
             firebase.database().ref('/users/' + userId).once('value').then(function (snapshot) {
                 const userData = snapshot.val();
                 if (userData === null) {
                     initializeUser(user.email)
+                } else {
+                    if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) { setCurrentUserInfo(userData) };
                 }
             });
         } else {
@@ -50,7 +53,6 @@ function App() {
     });
 
     const signUpUser = (email, password) => {
-        console.log(email, " ", password);
         firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -61,21 +63,31 @@ function App() {
 
     const initializeUser = (email) => {
         firebase.database().ref('users/' + currentUser.uid).set({
-            email: email,
+            email: email
         });
     }
 
-    const createUserInfo = (fname, lname, city, state, zip, gender, preference, imageUrl) => {
-        firebase.database().ref('users/' + currentUser.uid).set({
-            first_name: fname,
-            last_name: lname,
-            city: city,
-            state: state,
-            zip: zip,
-            gender: gender,
-            preference: preference,
-            profile_picture: imageUrl
-        });
+    const setUserInfo = (fname, lname, city, state, zip, gender, preference, imageUrl) => {
+        
+        const storageRef = firebase.storage().ref();
+        const ref = storageRef.child("users/" + currentUser.uid);
+        const file = imageUrl;
+        
+        ref.put(file).then(function (snapshot) {
+            ref.getDownloadURL().then( function(url) {
+                firebase.database().ref('users/' + currentUser.uid).set({
+                    email: currentUser.email,
+                    first_name: fname,
+                    last_name: lname,
+                    city: city,
+                    state: state,
+                    zip: zip,
+                    gender: gender,
+                    preference: preference,
+                    profile_picture: url
+                });
+            });
+        });       
 
     }
 
@@ -87,10 +99,6 @@ function App() {
         });
     }
 
-    const storeImage = (img) => {
-
-    }
-
     return (
         <Router>
             <div>
@@ -99,7 +107,7 @@ function App() {
                 <Route exact path="/Glitched-React/matched" component={Matching} />
                 <Route exact path="/Glitched-React/userinfo" render={
                     (props) => (
-                        <UserInfo storage={storeImage} createUserInfo={createUserInfo} />
+                        <UserInfo {...currentUserInfo} setUserInfo={setUserInfo} />
                     )} />
                 <Route exact path="/Glitched-React/messages" component={Messages} />
                 <Route exact path="/Glitched-React/admin" component={Admin} />
