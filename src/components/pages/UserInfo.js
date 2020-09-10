@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useRef } from "react";
 import DisplayImage from "../DisplayImage";
 
 function UserInfo(props) {
 
+  const fname = useRef();
+  const lname = useRef();
+  const city = useRef();
+  const state = useRef();
+  const zip = useRef();
+  const password = useRef();
+
   return (
     <div className="container mx-auto" style={{ margin: "40px", maxWidth: "500px" }}>
-      <form>
+      <div>
         <div className="form-row">
           <div className="col-md-6 mb-3">
-            <label for="validationDefault01">First name</label>
+            <label htmlFor="validationDefault01">First name</label>
             <input type="text"
               className="form-control"
               id="validationDefault01"
               placeholder="Jane" required />
           </div>
           <div className="col-md-6 mb-3">
-            <label for="validationDefault02">Last name</label>
+            <label htmlFor="validationDefault02">Last name</label>
             <input type="text"
               className="form-control"
               id="validationDefault02"
@@ -24,16 +31,16 @@ function UserInfo(props) {
         </div>
         <div className="form-row">
           <div className="col-md-6 mb-3">
-            <label for="validationDefault03">City</label>
+            <label htmlFor="validationDefault03">City</label>
             <input type="text"
               className="form-control"
               placeholder="Savannah"
               id="validationDefault03" required />
           </div>
           <div className="col-md-3 mb-3">
-            <label for="validationDefault04">State</label>
+            <label htmlFor="validationDefault04">State</label>
             <select className="custom-select" id="validationDefault04" required style={{ overflow: "hidden" }}>
-              <option selected disabled value="">Choose...</option>
+              <option disabled value="">Choose...</option>
               <option>AL</option>
               <option>AK</option>
               <option>AZ</option>
@@ -87,25 +94,25 @@ function UserInfo(props) {
             </select>
           </div>
           <div className="col-md-3 mb-3">
-            <label for="validationDefault05">Zip</label>
+            <label htmlFor="validationDefault05">Zip</label>
             <input type="text"
               className="form-control"
               placeholder="31407"
               id="validationDefault05" required />
           </div>
           <div className="col-md-6 mb-3">
-            <label for="validationDefault04">I Am....</label>
+            <label htmlFor="validationDefault04">I Am....</label>
             <select className="custom-select" id="validationDefault04" required style={{ overflow: "hidden" }}>
-              <option selected disabled value="">Gender</option>
+              <option disabled value="">Gender</option>
               <option>Male</option>
               <option>Female</option>
               <option>Non-Binary</option>
             </select>
           </div>
           <div className="col-md-6 mb-3">
-            <label for="validationDefault04">Looking for....</label>
+            <label htmlFor="validationDefault04">Looking for....</label>
             <select className="custom-select" id="validationDefault04" required style={{ overflow: "hidden" }}>
-              <option selected disabled value="">Gender</option>
+              <option disabled value="">Gender</option>
               <option>Male</option>
               <option>Female</option>
               <option>Non-Binary</option>
@@ -113,12 +120,12 @@ function UserInfo(props) {
             </select>
           </div>
           <div className="col-md-6 mb-3">
-            <DisplayImage></DisplayImage>
+            <DisplayImage storage={props.storage}></DisplayImage>
           </div>
         </div>
         <button className="btn btn-info" 
         type="submit">Add Info</button>
-      </form>
+      </div>
     </div>
   )
 }

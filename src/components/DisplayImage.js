@@ -16,6 +16,7 @@ class DisplayImage extends Component {
       this.setState({
         image: URL.createObjectURL(img)
       });
+      this.props.storage(img);
     }
   };
 
