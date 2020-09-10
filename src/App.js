@@ -67,28 +67,32 @@ function App() {
         });
     }
 
-    const setUserInfo = (fname, lname, city, state, zip, gender, preference, imageUrl) => {
-        
+    const setUserInfo = (fname, lname, city, state, zip, gender, preference, url) => {
+        firebase.database().ref('zip/').child(currentUser.uid).remove();
+        firebase.database().ref('users/' + currentUser.uid).set({
+            email: currentUser.email,
+            first_name: fname,
+            last_name: lname,
+            city: city,
+            state: state,
+            zip: zip,
+            gender: gender,
+            preference: preference,
+            profile_picture: url
+        });
+        firebase.database().ref('zip/' + gender + "/prefers_" + preference + "/" + currentUser.uid).set({
+            likes: "anime"
+        });
+    }
+
+    const storeBlob = (fname, lname, city, state, zip, gender, preference, blob) => {
         const storageRef = firebase.storage().ref();
         const ref = storageRef.child("users/" + currentUser.uid);
-        const file = imageUrl;
-        
-        ref.put(file).then(function (snapshot) {
-            ref.getDownloadURL().then( function(url) {
-                firebase.database().ref('users/' + currentUser.uid).set({
-                    email: currentUser.email,
-                    first_name: fname,
-                    last_name: lname,
-                    city: city,
-                    state: state,
-                    zip: zip,
-                    gender: gender,
-                    preference: preference,
-                    profile_picture: url
-                });
+        ref.put(blob).then(function () {
+            ref.getDownloadURL().then(function (url) {
+                setUserInfo(fname, lname, city, state, zip, gender, preference, url);
             });
-        });       
-
+        });
     }
 
     const signInUser = (email, password) => {
@@ -107,7 +111,7 @@ function App() {
                 <Route exact path="/Glitched-React/matched" component={Matching} />
                 <Route exact path="/Glitched-React/userinfo" render={
                     (props) => (
-                        <UserInfo {...currentUserInfo} setUserInfo={setUserInfo} />
+                        <UserInfo {...currentUserInfo} storeBlob={storeBlob} setUserInfo={setUserInfo} />
                     )} />
                 <Route exact path="/Glitched-React/messages" component={Messages} />
                 <Route exact path="/Glitched-React/admin" component={Admin} />

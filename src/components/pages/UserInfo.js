@@ -10,7 +10,7 @@ function UserInfo(props) {
   const zip = useRef();
   const gender = useRef();
   const preference = useRef();
-  const [imgBlob, setImg] = useState("");
+  const [img, setImg] = useState("");
 
   const [formState, setFormState] = useState({
     fname: null,
@@ -35,15 +35,28 @@ function UserInfo(props) {
 
   function handleSubmit(event) {
     event.preventDefault()
-    props.setUserInfo(
-      fname.current.value, 
-      lname.current.value,
-      city.current.value,
-      state.current.value, 
-      zip.current.value,
-      gender.current.value,
-      preference.current.value,
-      imgBlob)
+    if(img.type) {
+      props.storeBlob(
+        fname.current.value, 
+        lname.current.value,
+        city.current.value,
+        state.current.value, 
+        zip.current.value,
+        gender.current.value,
+        preference.current.value,
+        img
+      )
+    } else {
+      props.setUserInfo(
+        fname.current.value, 
+        lname.current.value,
+        city.current.value,
+        state.current.value, 
+        zip.current.value,
+        gender.current.value,
+        preference.current.value,
+        props.profile_picture)
+    }
   }
 
   return (
