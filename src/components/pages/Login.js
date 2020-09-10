@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import "../assets/login.css";
 
 function Login(props) {
@@ -7,11 +8,11 @@ function Login(props) {
     const password = useRef();
 
     return (
-        <div className="container mx-auto" style={{ margin: "40px", maxWidth: "500px" }}>
+        <div className="mx-auto card" style={{ margin: "40px", maxWidth: "500px" }}>
 
-            <div>
+            <div style={{margin: "10px 20px 10px 20px"}}>
 
-                <div className="form-group">
+                <div className="form-group" >
 
                     <input type="email"
                         className="form-control"
@@ -42,9 +43,12 @@ function Login(props) {
                             New User? Sign Up Here!</p>
                     </a>
                 </div>
-                <button type="submit" className="btn btn-info" onClick={() => props.signInUser(email.current.value, password.current.value)} style={{ marginBottom: "20px" }}>
+                <Link to = {"/Glitched-React/homepage"} >
+                <button type="submit" className="btn btn-info" 
+                onClick={() => props.signInUser(email.current.value, password.current.value)} style={{ marginBottom: "20px" }}>
                     Login
                 </button>
+                </Link>
 
 
             </div>

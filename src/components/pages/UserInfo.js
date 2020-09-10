@@ -35,12 +35,12 @@ function UserInfo(props) {
 
   function handleSubmit(event) {
     event.preventDefault()
-    if(img.type) {
+    if (img.type) {
       props.storeBlob(
-        fname.current.value, 
+        fname.current.value,
         lname.current.value,
         city.current.value,
-        state.current.value, 
+        state.current.value,
         zip.current.value,
         gender.current.value,
         preference.current.value,
@@ -48,10 +48,10 @@ function UserInfo(props) {
       )
     } else {
       props.setUserInfo(
-        fname.current.value, 
+        fname.current.value,
         lname.current.value,
         city.current.value,
-        state.current.value, 
+        state.current.value,
         zip.current.value,
         gender.current.value,
         preference.current.value,
@@ -60,8 +60,11 @@ function UserInfo(props) {
   }
 
   return (
-    <div className="container mx-auto" style={{ margin: "40px", maxWidth: "500px" }}>
-      <form onSubmit={handleSubmit}>
+    <div className="mx-auto card" style={{ margin: "40px", maxWidth: "500px" }}>
+      <div className="col-md-6 mb-3 mx-auto">
+        <DisplayImage currentImg={props.profile_picture} setImg={setImg} ></DisplayImage>
+      </div>
+      <form onSubmit={handleSubmit} style={{margin: "10px 20px 10px 20px"}}>
         <div className="form-row">
           <div className="col-md-6 mb-3">
             <label htmlFor="validationDefault01">First name</label>
@@ -184,7 +187,7 @@ function UserInfo(props) {
               name="gender"
               value={formState.gender || props.gender || ""}
               onChange={handleInputChange}
-              required 
+              required
               style={{ overflow: "hidden" }}>
               <option disabled value="">Gender</option>
               <option>Male</option>
@@ -194,13 +197,13 @@ function UserInfo(props) {
           </div>
           <div className="col-md-6 mb-3">
             <label htmlFor="validationDefault04">Looking for....</label>
-            <select className="custom-select" 
+            <select className="custom-select"
               id="validationDefault04"
               ref={preference}
               name="preference"
               value={formState.preference || props.preference || ""}
               onChange={handleInputChange}
-              required 
+              required
               style={{ overflow: "hidden" }}>
               <option disabled value="">Gender</option>
               <option>Male</option>
@@ -209,11 +212,8 @@ function UserInfo(props) {
               <option>Not Specific</option>
             </select>
           </div>
-          <div className="col-md-6 mb-3">
-            <DisplayImage currentImg={props.profile_picture} setImg={setImg}></DisplayImage>
-          </div>
         </div>
-        <button className="btn btn-info">Confirm Info</button>
+        <button className="btn btn-info mx-auto">Confirm Info</button>
       </form>
     </div>
   )

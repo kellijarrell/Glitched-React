@@ -46,6 +46,10 @@ function NavBar() {
               <i className="far fa-user-circle d-inline-block align-top" style={{ width: "30px", height: "30px" }}></i>
             </Link>
 
+            <Link to="/Glitched-React/admin" className={location.pathname === "/admin" ? "nav-link active" : "nav-link"}>
+              <i className="fas fa-sign-out-alt d-inline-block align-top" style={{ width: "30px", height: "30px" }}></i>
+            </Link>
+
         </ul>
       </div>
     </nav>
