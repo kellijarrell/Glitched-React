@@ -214,9 +214,7 @@ function UserInfo(props) {
             </select>
           </div>
         </div>
-        <Link to="/Glitched-React/">
-          <button className="btn btn-info mx-auto">Confirm Info</button>
-        </Link>
+        <button className="btn btn-info mx-auto">Confirm Info</button>
       </form>
     </div>
   )
