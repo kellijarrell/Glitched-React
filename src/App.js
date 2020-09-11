@@ -17,6 +17,8 @@ require("firebase/storage")
 
 function App() {
 
+    const origin = window.location.origin + "/Glitched-React";
+
     const firebaseConfig = {
         apiKey: process.env.REACT_APP_apiKey,
         authDomain: process.env.REACT_APP_authDomain,
@@ -46,21 +48,23 @@ function App() {
                     if (userData === null) {
                         // New user redirect
                         initializeUser(user.email)
-                        window.location.href = window.location.origin+"/Glitched-React/userinfo";
+                        window.location.href = origin + "/userinfo";
                     } else {
                         // Existing user redirect
-                        if(userData.personal) {
-                            if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) { 
+                        if (userData.personal) {
+                            if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) {
                                 setCurrentUserInfo(userData);
                                 setLoginState("Signed in as " + userData.personal.first_name + " " + userData.personal.last_name);
-                            };      
+                            };
                         }
                     }
                 });
             }
         } else {
             // No user is signed in.
-            
+            if (window.location.href !== origin && window.location.href !== origin + "/SignUp") {
+                window.location.href = origin;
+            }
         }
     });
 
@@ -74,11 +78,11 @@ function App() {
     }
 
     const initializeUser = (email) => {
-        if(currentUser.uid) {
+        if (currentUser.uid) {
             firebase.database().ref('users/' + currentUser.uid).set({
                 email: email
             });
-        }   
+        }
     }
 
     const setUserInfo = (fname, lname, city, state, zip, gender, preference, url) => {
@@ -116,30 +120,21 @@ function App() {
             console.log(errorCode, errorMessage);
         });
     }
-    
+
     const signOut = () => {
-        firebase.auth().signOut().then(function() {
+        firebase.auth().signOut().then(function () {
             // Sign-out successful.
-            setLoginState("Welcome, please sign in.");
-            window.location.href = window.location.origin+"/Glitched-React";
-          }).catch(function(error) {
+            setLoginState("");
+            window.location.href = window.location.origin + "/Glitched-React";
+        }).catch(function (error) {
             // An error happened.
             console.log(error);
-          });
+        });
     }
 
-    return (
-        <Router>
-            <div>
-                <NavBar loginState={loginState} signOut={signOut} />
-                <Route exact path="/Glitched-React/homepage" component={Homepage} />
-                <Route exact path="/Glitched-React/matched" component={Matching} />
-                <Route exact path="/Glitched-React/error" component={ErrorPage} />
-                <Route exact path="/Glitched-React/userinfo" render={
-                    (props) => (
-                        <UserInfo {...currentUserInfo.personal} storeBlob={storeBlob} setUserInfo={setUserInfo} />
-                    )} />
-                <Route exact path="/Glitched-React/messages" component={Messages} />
+    if (loginState === "Welcome, please sign in.") {
+        return (
+            <Router>
                 <Route exact path="/Glitched-React/" render={
                     (props) => (
                         <Login signInUser={signInUser} />
@@ -148,11 +143,25 @@ function App() {
                     (props) => (
                         <SignUp signUpUser={signUpUser} />
                     )} />
-
-
-            </div>
-        </Router>
-    );
+            </Router>
+        );
+    } else {
+        return (
+            <Router>
+                <div>
+                    <NavBar loginState={loginState} signOut={signOut} />
+                    <Route exact path="/Glitched-React/homepage" component={Homepage} />
+                    <Route exact path="/Glitched-React/matched" component={Matching} />
+                    <Route exact path="/Glitched-React/error" component={ErrorPage} />
+                    <Route exact path="/Glitched-React/userinfo" render={
+                        (props) => (
+                            <UserInfo {...currentUserInfo.personal} storeBlob={storeBlob} setUserInfo={setUserInfo} />
+                        )} />
+                    <Route exact path="/Glitched-React/messages" component={Messages} />
+                </div>
+            </Router>
+        );
+    }
 }
 
 export default App;
