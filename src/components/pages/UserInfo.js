@@ -21,7 +21,13 @@ function UserInfo(props) {
     state: null,
     zip: null,
     gender: null,
-    preference: null
+    preference: null,
+    likes: {
+      anime: null,
+      videogames: null,
+      comics: null,
+      tabletop: null
+    }
   })
 
   function handleInputChange(event) {
@@ -37,6 +43,15 @@ function UserInfo(props) {
 
   function handleSubmit(event) {
     event.preventDefault()
+    let tempLikes = {};
+    Object.keys(formState.likes).forEach(like => {
+      if(formState.likes[like] === null) {
+        tempLikes[like] = props[like];
+      } else {
+        tempLikes[like] = formState.likes[like];
+      }
+    })
+    props.setUserLikes(tempLikes.anime, tempLikes.videogames, tempLikes.comics, tempLikes.tabletop);
     if (img.type) {
       props.storeBlob(
         fname.current.value,
@@ -59,6 +74,18 @@ function UserInfo(props) {
         preference.current.value,
         props.profile_picture)
     }
+  }
+
+  function handleCheckBoxChange(event) {
+    const { name } = event.target;
+
+    setFormState({
+      ...formState,
+      likes: {
+        ...formState.likes,
+        [name]: !formState.likes[name]
+      }
+    });
   }
 
   return (
@@ -217,33 +244,33 @@ function UserInfo(props) {
           <div className="col-md-3 mb-3" style={{ textAlign: "center" }}>
             <i className="fas fa-dragon"></i>
             <br></br>
-          Anime
-          <br></br>
-            <input type="checkbox" id="anime" name="anime" value="anime" />
+            Anime
+            <br></br>
+            <input type="checkbox" id="anime" onChange={handleCheckBoxChange} checked={(formState.likes.anime !== null) ? formState.likes.anime : props.anime} name="anime" />
           </div>
           <div className="col-md-3 mb-3" style={{ textAlign: "center" }}>
             <i className="fas fa-gamepad"></i>
             <br></br>
-          Video Games
-          <br></br>
-            <input type="checkbox" id="videogames" name="videogames" value="videogames" />
+            Video Games
+            <br></br>
+            <input type="checkbox" id="videogames" name="videogames" onChange={handleCheckBoxChange} checked={(formState.likes.videogames !== null) ? formState.likes.videogames : props.videogames} />
           </div>
           <div className="col-md-3 mb-3" style={{ textAlign: "center" }}>
             <i className="fas fa-mask"></i>
             <br></br>
-          Comic Books
-          <br></br>
-            <input type="checkbox" id="comics" name="comics" value="comics" />
+            Comic Books
+            <br></br>
+            <input type="checkbox" id="comics" name="comics" onChange={handleCheckBoxChange} checked={(formState.likes.comics !== null) ? formState.likes.comics : props.comics} />
           </div>
 
           <div className="col-md-3 mb-3" style={{ textAlign: "center" }}>
             <i className="fas fa-dice"></i>
             <br></br>
-          Table Top
-          <br></br>
-            <input type="checkbox" id="tabletop" name="tabletop" value="tabletop" />
+            Table Top
+            <br></br>
+            <input type="checkbox" id="tabletop" name="tabletop" onChange={handleCheckBoxChange} checked={(formState.likes.tabletop !== null) ? formState.likes.tabletop : props.tabletop} />
           </div>
-          
+
         </div>
         <button className="btn btn-info mx-auto">Confirm Info</button>
       </form>

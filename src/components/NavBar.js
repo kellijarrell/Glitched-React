@@ -9,11 +9,10 @@ function NavBar(props) {
   return (
     <nav className="navbar navbar-expand navbar-dark"
       style={{ backgroundColor: "#71cae3" }}>
-
-      <a
+      <Link to="/Glitched-React/" 
         id="nav"
         className="navbar-brand"
-        href="/Glitched-React/homepage">
+        href="/Glitched-React/">
         <img
           src={logo}
           width="auto"
@@ -21,8 +20,7 @@ function NavBar(props) {
           className="d-inline-block align-top"
           alt="glitched"
         />
-      </a>
-
+      </Link>
       <div
         className="collapse navbar-collapse"
         id="navbarNav">

@@ -25,20 +25,20 @@ function Card(props) {
         <h6 style={{textAlign: "center", color:"white", marginBottom: "0px"}}>Swipe Right to <span style={{ color:"#B1DA96"}}>Match</span> <br></br> Swipe Left to <span style={{ color:"#c01a1a"}}>Pass</span></h6>
         <br></br>
         <div className="user__card__img" style={{ marginBottom: "0px"}}>
-          <img src={props.image} className="card-circle-img" alt="..." />
+          <img src={props.user.profile_picture} className="card-circle-img" alt="..." />
 
         </div>
-        <h3 className="user__card__name">{props.name}</h3>
+        <h3 className="user__card__name">{props.user.first_name + " " + props.user.last_name}</h3>
       </div>
       <div className="user__card__btm">
         <br></br>
-        <p className="user__card__we">Age: {props.age}
+        <p className="user__card__we">
         </p>
 
         <p className="user__card__we">
-          <i className="fas fa-map-marker-alt"></i> {props.location}</p>
+          <i className="fas fa-map-marker-alt"></i> {props.user.city + ", " + props.user.state}</p>
 
-        <p className="user__card__we">{props.description}</p>
+        <p className="user__card__we">{"Likes: " + Object.keys(props.likes).filter((like, index) => Object.values(props.likes)[index]).join(', ')}</p>
 
       </div>
       <div className="user__card__choice m--reject">

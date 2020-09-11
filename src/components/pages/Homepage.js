@@ -1,67 +1,60 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/homepage.scss";
 import "../assets/hompage-script";
-import Card from "../Card";
-import anna from "../assets/images/anna.jpg";
-import taylour from "../assets/images/taylour.jpg";
-import kelli from "../assets/images/kelli.jpg";
+import UserBox from "../UserBox";
 
+function Homepage(props) {
 
+    const [matches, setMatches] = useState([]);
+    const [users, setUsers] = useState({});
+    const [usersRetrieved, setUsersRetrieves] = useState(0);
 
+    useEffect(() => {
+        getMatches();
+    }, [usersRetrieved]);
 
-function Homepage() {
+    const getUsers = (userIds) => {
+        userIds.forEach(userId => {
+            const userRef = props.database.ref("users/" + userId);
+            userRef.on('value', function (snapshot) {
+                setUsers({
+                    ...users,
+                    [userId]: snapshot.val()
+                })
+            })
+        })
 
-    var users = [
-        {
-            image: anna,
-            name: "Annastasshia Ames",
-            age: 32,
-            location: "Savannah, GA",
-            description: "Anime, Video Games, All Things Nerdy",
-            profileUrl: "https://warm-badlands-80819.herokuapp.com/"
-        },
-        {
-            image: kelli,
-            name: "Kelli Jarrell",
-            age: 27,
-            location: "Savannah, GA",
-            description: "Anime, Video Games, All Things Nerdy",
-            profileUrl: "https://warm-badlands-80819.herokuapp.com/"
-        },
-        {
-            image: taylour,
-            name: "Taylour Maggart",
-            age: 35,
-            location: "Savannah, GA",
-            description: "Anime, Video Games, All Things Nerdy",
-            profileUrl: "https://warm-badlands-80819.herokuapp.com/"
+    }
+
+    const getMatches = () => {
+        setTimeout(()=>{if (props.currentUserInfo.personal === undefined) setUsersRetrieves(usersRetrieved+1)}, 50);
+        if (props.currentUserInfo.personal) {
+            const matchesRef = props.database.ref("zip/" + props.currentUserInfo.personal.zip + "/" + props.currentUserInfo.personal.preference + "/prefers_" + props.currentUserInfo.personal.gender);
+            matchesRef.on('value', function (snapshot) {
+                const snapArray = Object.keys(snapshot.val()).map(key => {
+                    return snapshot.val()[key];
+                });
+                const tempArray = [];
+                snapArray.forEach(user => {
+                    tempArray.push(user.id);
+                })
+                setMatches(tempArray);
+                getUsers(tempArray);
+            });
         }
-    ]
+    }
+
     return (
         <div>
-
-
-                    <div className="user">
-                        <header className="user__header"></header>
-                        <div className="user__content">
-                            <div className="user__card-cont">
-
-                                {users.map(user => (
-
-                                    <Card
-                                        image={user.image}
-                                        name={user.name}
-                                        age={user.age}
-                                        location={user.location}
-                                        description={user.description}
-                                        profileUrl={user.url}
-
-                                    />
-                                ))}
-                            </div>
-                        </div>
+            <div className="user">
+                <header className="user__header"></header>
+                <div className="user__content">
+                    <div className="user__card-cont">
+                        <UserBox users={users} matches={matches}/>
                     </div>
                 </div>
+            </div>
+        </div>
 
     )
 }

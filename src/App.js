@@ -34,16 +34,29 @@ function App() {
         firebase.initializeApp(firebaseConfig);
     }
 
+    const auth = firebase.auth();
+    const database = firebase.database();
+    const storage = firebase.storage();
+
     const [currentUser, setCurrentUser] = useState();
     const [currentUserInfo, setCurrentUserInfo] = useState({ first_name: null });
+    const [currentUserLikes, setCurrentUserLikes] = useState({
+        anime: false,
+        videogames: false,
+        comics: false,
+        tabletop: false
+    })
     const [loginState, setLoginState] = useState("Welcome, please sign in.");
-
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
+    
+    const [startup, setStartup] = useState(false);
+    auth.onAuthStateChanged(function (user) {
+        if(startup === true && user === auth.currentUser) return;
+        setStartup(true);
+        if (user) {            
             setCurrentUser(user);
             const userId = user.uid;
             if (userId) {
-                firebase.database().ref('/users/' + userId).once('value').then(function (snapshot) {
+                database.ref('/users/' + userId).once('value').then(function (snapshot) {
                     const userData = snapshot.val();
                     if (userData === null) {
                         // New user redirect
@@ -54,6 +67,9 @@ function App() {
                         if (userData.personal) {
                             if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) {
                                 setCurrentUserInfo(userData);
+                                if(userData.likes) {
+                                    setCurrentUserLikes(userData.likes);
+                                }
                                 setLoginState("Signed in as " + userData.personal.first_name + " " + userData.personal.last_name);
                             };
                         } else {
@@ -64,6 +80,7 @@ function App() {
             }
         } else {
             // No user is signed in.
+            console.log("FALSE", user);
             if (window.location.href !== origin && window.location.href !== origin + "/SignUp") {
                 window.location.href = origin;
             }
@@ -71,7 +88,7 @@ function App() {
     });
 
     const signUpUser = (email, password) => {
-        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
+        auth.createUserWithEmailAndPassword(email, password).catch(function (error) {
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(errorCode, errorMessage);
@@ -81,15 +98,15 @@ function App() {
 
     const initializeUser = (email) => {
         if (currentUser.uid) {
-            firebase.database().ref('users/' + currentUser.uid).set({
+            database.ref('users/' + currentUser.uid).set({
                 email: email
             });
         }
     }
 
     const setUserInfo = (fname, lname, city, state, zip, gender, preference, url) => {
-        firebase.database().ref('zip/' + currentUserInfo.personal.zip + "/" + currentUserInfo.personal.gender + "/prefers_" + currentUserInfo.personal.preference + "/" + currentUser.uid).remove();
-        firebase.database().ref('users/' + currentUser.uid + "/personal/").set({
+        database.ref('zip/' + currentUserInfo.personal.zip + "/" + currentUserInfo.personal.gender + "/prefers_" + currentUserInfo.personal.preference + "/" + currentUser.uid).remove();
+        database.ref('users/' + currentUser.uid + "/personal/").set({
             first_name: fname,
             last_name: lname,
             city: city,
@@ -99,14 +116,22 @@ function App() {
             preference: preference,
             profile_picture: url
         });
-        firebase.database().ref('zip/' + zip + "/" + gender + "/prefers_" + preference + "/" + currentUser.uid).set({
-            likes: "anime"
+        database.ref('zip/' + zip + "/" + gender + "/prefers_" + preference + "/" + currentUser.uid).set({
+            id: currentUser.uid
         });
         window.location.href = window.location.origin + "/Glitched-React/";
     }
 
+    const setUserLikes = (anime, videogames, comics, tabletop) => {
+        database.ref('users/' + currentUser.uid + "/likes/").set({
+            anime: anime,
+            videogames: videogames,
+            tabletop: tabletop,
+            comics: comics
+        });
+    }
     const storeBlob = (fname, lname, city, state, zip, gender, preference, blob) => {
-        const storageRef = firebase.storage().ref();
+        const storageRef = storage.ref();
         const ref = storageRef.child("users/" + currentUser.uid);
         ref.put(blob).then(function () {
             ref.getDownloadURL().then(function (url) {
@@ -116,7 +141,7 @@ function App() {
     }
 
     const signInUser = (email, password) => {
-        firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+        auth.signInWithEmailAndPassword(email, password).catch(function (error) {
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(errorCode, errorMessage);
@@ -124,7 +149,7 @@ function App() {
     }
 
     const signOut = () => {
-        firebase.auth().signOut().then(function () {
+        auth.signOut().then(function () {
             // Sign-out successful.
             setLoginState("Welcome, please sign in");
             window.location.href = window.location.origin + "/Glitched-React";
@@ -153,7 +178,7 @@ function App() {
             <Router>
                 <Route exact path="/Glitched-React/" render={
                     (props) => (
-                        <UserInfo {...currentUserInfo.personal} storeBlob={storeBlob} setUserInfo={setUserInfo} />
+                        <UserInfo {...currentUserInfo.personal} {...currentUserLikes} storeBlob={storeBlob} setUserInfo={setUserInfo} setUserLikes={setUserLikes} />
                     )} />
                 <Route exact path="/Glitched-React/error" component={ErrorPage} />
             </Router>
@@ -163,12 +188,15 @@ function App() {
             <Router>
                 <div>
                     <NavBar loginState={loginState} signOut={signOut} />
-                    <Route exact path="/Glitched-React/" component={Homepage} />
+                    <Route exact path="/Glitched-React/" render={
+                        (props) => (
+                            <Homepage database={database} currentUserInfo={currentUserInfo} likes={currentUserLikes} />
+                        )} />
                     <Route exact path="/Glitched-React/matched" component={Matching} />
                     <Route exact path="/Glitched-React/error" component={ErrorPage} />
                     <Route exact path="/Glitched-React/userinfo" render={
                         (props) => (
-                            <UserInfo {...currentUserInfo.personal} storeBlob={storeBlob} setUserInfo={setUserInfo} />
+                            <UserInfo {...currentUserInfo.personal} {...currentUserLikes} storeBlob={storeBlob} setUserInfo={setUserInfo} setUserLikes={setUserLikes} />
                         )} />
                     <Route exact path="/Glitched-React/messages" component={Messages} />
                 </div>
