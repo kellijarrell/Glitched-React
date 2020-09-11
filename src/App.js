@@ -34,7 +34,7 @@ function App() {
         firebase.initializeApp(firebaseConfig);
     }
 
-    const [currentUser, setCurrentUser] = useState({});
+    const [currentUser, setCurrentUser] = useState();
     const [currentUserInfo, setCurrentUserInfo] = useState({ first_name: null });
     const [loginState, setLoginState] = useState("Welcome, please sign in.");
 
@@ -56,6 +56,8 @@ function App() {
                                 setCurrentUserInfo(userData);
                                 setLoginState("Signed in as " + userData.personal.first_name + " " + userData.personal.last_name);
                             };
+                        } else {
+                            setLoginState("needs more info");
                         }
                     }
                 });
@@ -124,7 +126,7 @@ function App() {
     const signOut = () => {
         firebase.auth().signOut().then(function () {
             // Sign-out successful.
-            setLoginState("");
+            setLoginState("Welcome, please sign in");
             window.location.href = window.location.origin + "/Glitched-React";
         }).catch(function (error) {
             // An error happened.
@@ -132,7 +134,7 @@ function App() {
         });
     }
 
-    if (loginState === "Welcome, please sign in.") {
+    if (!currentUser) {
         return (
             <Router>
                 <Route exact path="/Glitched-React/" render={
@@ -143,6 +145,17 @@ function App() {
                     (props) => (
                         <SignUp signUpUser={signUpUser} />
                     )} />
+                <Route exact path="/Glitched-React/error" component={ErrorPage} />
+            </Router >
+        );
+    } else if (!currentUserInfo) {
+        return (
+            <Router>
+                <Route exact path="/Glitched-React/" render={
+                    (props) => (
+                        <UserInfo {...currentUserInfo.personal} storeBlob={storeBlob} setUserInfo={setUserInfo} />
+                    )} />
+                <Route exact path="/Glitched-React/error" component={ErrorPage} />
             </Router>
         );
     } else {
@@ -150,7 +163,7 @@ function App() {
             <Router>
                 <div>
                     <NavBar loginState={loginState} signOut={signOut} />
-                    <Route exact path="/Glitched-React/homepage" component={Homepage} />
+                    <Route exact path="/Glitched-React/" component={Homepage} />
                     <Route exact path="/Glitched-React/matched" component={Matching} />
                     <Route exact path="/Glitched-React/error" component={ErrorPage} />
                     <Route exact path="/Glitched-React/userinfo" render={

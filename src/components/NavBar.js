@@ -28,7 +28,7 @@ function NavBar(props) {
         id="navbarNav">
         <ul className="navbar-nav ml-auto">
         <span>{props.loginState}</span>
-          <Link to="/Glitched-React/homepage" className={location.pathname === "/homepage" ? "nav-link active" : "nav-link"}>
+          <Link to="/Glitched-React/" className={location.pathname === "/" ? "nav-link active" : "nav-link"}>
             <i className="fas fa-home d-inline-block align-top" style={{ width: "30px", height: "30px" }}
 
             ></i>
