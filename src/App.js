@@ -47,8 +47,10 @@ function App() {
                     window.location.href = window.location.origin+"/Glitched-React/userinfo";
                 } else {
                     // Existing user redirect
-                    if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) { setCurrentUserInfo(userData) };
-                    setLoginState("Signed in as " + currentUserInfo.personal.first_name);
+                    if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) { 
+                        setCurrentUserInfo(userData);
+                        setLoginState("Signed in as " + userData.personal.first_name + " " + userData.personal.last_name);
+                    };         
                 }
             });
         } else {
