@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import DisplayImage from "../DisplayImage";
 import { Link } from "react-router-dom";
+import "../assets/homepage.scss"
 
 function UserInfo(props) {
 
@@ -65,7 +66,7 @@ function UserInfo(props) {
       <div className="col-md-6 mb-3 mx-auto">
         <DisplayImage currentImg={props.profile_picture} setImg={setImg} ></DisplayImage>
       </div>
-      <form onSubmit={handleSubmit} style={{ margin: "10px 20px 10px 20px" }}>
+      <form onSubmit={handleSubmit} style={{ margin: "20px" }}>
         <div className="form-row">
           <div className="col-md-6 mb-3">
             <label htmlFor="validationDefault01">First name</label>
@@ -213,6 +214,36 @@ function UserInfo(props) {
               <option>Not Specific</option>
             </select>
           </div>
+          <div className="col-md-3 mb-3" style={{ textAlign: "center" }}>
+            <i className="fas fa-dragon"></i>
+            <br></br>
+          Anime
+          <br></br>
+            <input type="checkbox" id="anime" name="anime" value="anime" />
+          </div>
+          <div className="col-md-3 mb-3" style={{ textAlign: "center" }}>
+            <i className="fas fa-gamepad"></i>
+            <br></br>
+          Video Games
+          <br></br>
+            <input type="checkbox" id="videogames" name="videogames" value="videogames" />
+          </div>
+          <div className="col-md-3 mb-3" style={{ textAlign: "center" }}>
+            <i className="fas fa-mask"></i>
+            <br></br>
+          Comic Books
+          <br></br>
+            <input type="checkbox" id="comics" name="comics" value="comics" />
+          </div>
+
+          <div className="col-md-3 mb-3" style={{ textAlign: "center" }}>
+            <i className="fas fa-dice"></i>
+            <br></br>
+          Table Top
+          <br></br>
+            <input type="checkbox" id="tabletop" name="tabletop" value="tabletop" />
+          </div>
+          
         </div>
         <button className="btn btn-info mx-auto">Confirm Info</button>
       </form>
