@@ -26,7 +26,7 @@ class DisplayImage extends Component {
         <div>
           <div>
             <img src={this.state.image || this.props.currentImg} 
-            style={{width: "200px", height: "200px", backgroundImage: "url(https://placehold.it/200x200)"}}
+            style={{width: "200px", height: "200px", backgroundImage: "url(https://placehold.it/200x200)", borderRadius: "50%", margin: "20px" }}
             className="card-img-top circle-img"/>
             <h5>Select A Profile Image</h5>
             <input 
