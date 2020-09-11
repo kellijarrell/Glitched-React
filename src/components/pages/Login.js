@@ -10,7 +10,7 @@ function Login(props) {
     return (
         <div className="mx-auto card" style={{ margin: "40px", maxWidth: "500px" }}>
 
-            <div style={{margin: "10px 20px 10px 20px"}}>
+            <div style={{margin: "20px 20px 0px 20px"}}>
 
                 <div className="form-group" >
 
@@ -18,8 +18,7 @@ function Login(props) {
                         className="form-control"
                         id="exampleInputEmail1"
                         placeholder="Email"
-                        ref={email}
-                        style={{ backgroundColor: "#71cae3" }} />
+                        ref={email} />
                 </div>
 
                 <div className="form-group">
@@ -29,17 +28,16 @@ function Login(props) {
                         className="form-control"
                         id="exampleInputPassword1"
                         placeholder="Password"
-                        ref={password}
-                        style={{ backgroundColor: "#71cae3" }} />
+                        ref={password} />
 
                 </div>
                 <div className="row">
                     <a href="" style={{ color: "black" }}>
-                        <p className="col" style={{ textShadow: "2px 2px 2px #71cae3" }}>
+                        <p className="col">
                             Forgot Password?</p>
                     </a>
                     <a href="/Glitched-React/SignUp" style={{ color: "black" }}>
-                        <p className="col" style={{ textShadow: "2px 2px 2px #71cae3" }}>
+                        <p className="col">
                             New User? Sign Up Here!</p>
                     </a>
                 </div>
