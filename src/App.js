@@ -88,7 +88,7 @@ function App() {
     }
 
     const setUserInfo = (fname, lname, city, state, zip, gender, preference, url) => {
-        firebase.database().ref('zip/').child(currentUser.uid).remove();
+        firebase.database().ref('zip/' + currentUserInfo.personal.zip + "/" + currentUserInfo.personal.gender + "/prefers_" + currentUserInfo.personal.preference + "/" + currentUser.uid).remove();
         firebase.database().ref('users/' + currentUser.uid + "/personal/").set({
             first_name: fname,
             last_name: lname,
