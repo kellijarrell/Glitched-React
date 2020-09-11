@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import DisplayImage from "../DisplayImage";
-import { Link } from "react-router-dom";
 import "../assets/homepage.scss"
 
 function UserInfo(props) {

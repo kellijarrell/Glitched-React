@@ -9,18 +9,14 @@ function Homepage(props) {
     const [users, setUsers] = useState({});
     const [usersRetrieved, setUsersRetrieves] = useState(0);
 
-    useEffect(() => {
-        getMatches();
-    }, [usersRetrieved]);
-
     const getUsers = (userIds) => {
         userIds.forEach(userId => {
             const userRef = props.database.ref("users/" + userId);
+            const tempObj = users;
             userRef.on('value', function (snapshot) {
-                setUsers({
-                    ...users,
-                    [userId]: snapshot.val()
-                })
+                tempObj[userId] = snapshot.val();
+                setUsers(tempObj);
+                setUsersRetrieves(true);
             })
         })
 
@@ -28,6 +24,7 @@ function Homepage(props) {
 
     const getMatches = () => {
         setTimeout(()=>{if (props.currentUserInfo.personal === undefined) setUsersRetrieves(usersRetrieved+1)}, 50);
+        if(usersRetrieved === "stop") return;
         if (props.currentUserInfo.personal) {
             const matchesRef = props.database.ref("zip/" + props.currentUserInfo.personal.zip + "/" + props.currentUserInfo.personal.preference + "/prefers_" + props.currentUserInfo.personal.gender);
             matchesRef.on('value', function (snapshot) {
@@ -40,9 +37,14 @@ function Homepage(props) {
                 })
                 setMatches(tempArray);
                 getUsers(tempArray);
+                setUsersRetrieves("stop");
             });
         }
     }
+
+    useEffect(() => {
+        getMatches();
+    }, [usersRetrieved]);
 
     return (
         <div>

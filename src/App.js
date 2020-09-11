@@ -109,7 +109,6 @@ function App() {
             setCurrentUser(user);
         } else {
             // No user is signed in.
-            console.log("FALSE", user);
             if (window.location.href !== origin && window.location.href !== origin + "/SignUp") {
                 window.location.href = origin;
             }
