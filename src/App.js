@@ -69,9 +69,11 @@ function App() {
     }
 
     const initializeUser = (email) => {
-        firebase.database().ref('users/' + currentUser.uid).set({
-            email: email
-        });
+        if(currentUser.uid) {
+            firebase.database().ref('users/' + currentUser.uid).set({
+                email: email
+            });
+        }   
     }
 
     const setUserInfo = (fname, lname, city, state, zip, gender, preference, url) => {
@@ -89,6 +91,7 @@ function App() {
         firebase.database().ref('zip/' + zip + "/" + gender + "/prefers_" + preference + "/" + currentUser.uid).set({
             likes: "anime"
         });
+        window.location.href = window.location.origin + "/Glitched-React/";
     }
 
     const storeBlob = (fname, lname, city, state, zip, gender, preference, blob) => {
