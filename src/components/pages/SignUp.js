@@ -6,8 +6,8 @@ function SignUp(props) {
   const password = useRef();
 
   return (
-    <div className="container mx-auto" style={{ margin: "40px", maxWidth: "500px" }}>
-      <div>
+    <div className="mx-auto card" style={{ margin: "40px", maxWidth: "500px" }}>
+      <div style={{margin: "20px"}}>
         <div className="form-row">
           <div className="col-md-6 mb-3">
             <label htmlFor="validationDefault01">Email</label>

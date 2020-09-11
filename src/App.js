@@ -8,6 +8,7 @@ import Login from "./components/pages/Login";
 import SignUp from "./components/pages/SignUp"
 import UserInfo from "./components/pages/UserInfo";
 import Matching from "./components/pages/Matching";
+import ErrorPage from "./components/pages/404page";
 
 const firebase = require("firebase/app");
 require("firebase/auth");
@@ -129,6 +130,7 @@ function App() {
                 <NavBar loginState={loginState} signOut={signOut} />
                 <Route exact path="/Glitched-React/homepage" component={Homepage} />
                 <Route exact path="/Glitched-React/matched" component={Matching} />
+                <Route exact path="/Glitched-React/error" component={ErrorPage} />
                 <Route exact path="/Glitched-React/userinfo" render={
                     (props) => (
                         <UserInfo {...currentUserInfo.personal} storeBlob={storeBlob} setUserInfo={setUserInfo} />
