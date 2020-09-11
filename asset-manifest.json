@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/Glitched-React/static/css/main.ae6b566f.chunk.css",
+    "main.js": "/Glitched-React/static/js/main.9d4d2a16.chunk.js",
+    "main.js.map": "/Glitched-React/static/js/main.9d4d2a16.chunk.js.map",
+    "runtime-main.js": "/Glitched-React/static/js/runtime-main.9e2d77bd.js",
+    "runtime-main.js.map": "/Glitched-React/static/js/runtime-main.9e2d77bd.js.map",
+    "static/js/2.0d1ada7a.chunk.js": "/Glitched-React/static/js/2.0d1ada7a.chunk.js",
+    "static/js/2.0d1ada7a.chunk.js.map": "/Glitched-React/static/js/2.0d1ada7a.chunk.js.map",
+    "index.html": "/Glitched-React/index.html",
+    "precache-manifest.18d2a1f09731e7ac03640cb48542f153.js": "/Glitched-React/precache-manifest.18d2a1f09731e7ac03640cb48542f153.js",
+    "service-worker.js": "/Glitched-React/service-worker.js",
+    "static/css/main.ae6b566f.chunk.css.map": "/Glitched-React/static/css/main.ae6b566f.chunk.css.map",
+    "static/js/2.0d1ada7a.chunk.js.LICENSE.txt": "/Glitched-React/static/js/2.0d1ada7a.chunk.js.LICENSE.txt",
+    "static/media/anna.jpg": "/Glitched-React/static/media/anna.b78dbcbe.jpg",
+    "static/media/homepage.scss": "/Glitched-React/static/media/background.5e56a067.png",
+    "static/media/default-av.svg": "/Glitched-React/static/media/default-av.2c1d3e9b.svg",
+    "static/media/errorpage.svg": "/Glitched-React/static/media/errorpage.72b409fa.svg",
+    "static/media/glitched-logo.svg": "/Glitched-React/static/media/glitched-logo.8a631c25.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9e2d77bd.js",
+    "static/js/2.0d1ada7a.chunk.js",
+    "static/css/main.ae6b566f.chunk.css",
+    "static/js/main.9d4d2a16.chunk.js"
+  ]
+}
