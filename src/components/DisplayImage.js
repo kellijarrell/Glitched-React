@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import defaultAvi from "../components/assets/images/default-av.svg"
 
 class DisplayImage extends Component {
   constructor(props) {
@@ -24,10 +25,9 @@ class DisplayImage extends Component {
     return (
       <div>
         <div>
-          <div>
+          <div className="mx-auto"> 
             <img src={this.state.image || this.props.currentImg} 
-            style={{width: "200px", height: "200px", backgroundImage: "url(https://placehold.it/200x200)", borderRadius: "50%", margin: "20px" }}
-            className="card-img-top circle-img"/>
+            style={{width: "150px", height: "150px", backgroundImage: `url(${defaultAvi})`, borderRadius: "50%", margin: "20px"}} />
             <h5>Select A Profile Image</h5>
             <input 
             type="file" 
