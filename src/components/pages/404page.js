@@ -1,8 +1,11 @@
 import React from "react";
+import errorImg from "../assets/images/errorpage.svg"
 
 function ErrorPage() {
     return(
-<h1>Error</h1>
+<div class= "container mx-auto">
+<img src={errorImg} alt="error page" />
+</div>
     )
 }
 
