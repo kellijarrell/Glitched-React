@@ -48,11 +48,12 @@ function App() {
                 } else {
                     // Existing user redirect
                     if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) { setCurrentUserInfo(userData) };
+                    setLoginState("Signed in as " + currentUserInfo.personal.first_name);
                 }
             });
         } else {
             // No user is signed in.
-            setLoginState("Signed in as " + currentUserInfo.personal.first_name)
+            
         }
     });
 
