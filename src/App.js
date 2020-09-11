@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Homepage from "./components/pages/Homepage";
-import Admin from "./components/pages/Admin";
 import Messages from "./components/pages/Messages";
 import "./components/assets/all-pages-style.css";
 import Login from "./components/pages/Login";
@@ -34,6 +33,7 @@ function App() {
 
     const [currentUser, setCurrentUser] = useState({});
     const [currentUserInfo, setCurrentUserInfo] = useState({ first_name: null });
+    const [loginState, setLoginState] = useState("Welcome, please sign in.");
 
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -48,10 +48,12 @@ function App() {
                 } else {
                     // Existing user redirect
                     if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) { setCurrentUserInfo(userData) };
+                    setLoginState("Signed in as " + currentUserInfo.personal.first_name);
                 }
             });
         } else {
             // No user is signed in.
+            
         }
     });
 
@@ -72,8 +74,7 @@ function App() {
 
     const setUserInfo = (fname, lname, city, state, zip, gender, preference, url) => {
         firebase.database().ref('zip/').child(currentUser.uid).remove();
-        firebase.database().ref('users/personal' + currentUser.uid).set({
-            email: currentUser.email,
+        firebase.database().ref('users/' + currentUser.uid + "/personal/").set({
             first_name: fname,
             last_name: lname,
             city: city,
@@ -105,19 +106,29 @@ function App() {
             console.log(errorCode, errorMessage);
         });
     }
+    
+    const signOut = () => {
+        firebase.auth().signOut().then(function() {
+            // Sign-out successful.
+            setLoginState("Welcome, please sign in.");
+            window.location.href = window.location.origin+"/Glitched-React";
+          }).catch(function(error) {
+            // An error happened.
+            console.log(error);
+          });
+    }
 
     return (
         <Router>
             <div>
-                <NavBar />
+                <NavBar loginState={loginState} signOut={signOut} />
                 <Route exact path="/Glitched-React/homepage" component={Homepage} />
                 <Route exact path="/Glitched-React/matched" component={Matching} />
                 <Route exact path="/Glitched-React/userinfo" render={
                     (props) => (
-                        <UserInfo {...currentUserInfo} storeBlob={storeBlob} setUserInfo={setUserInfo} />
+                        <UserInfo {...currentUserInfo.personal} storeBlob={storeBlob} setUserInfo={setUserInfo} />
                     )} />
                 <Route exact path="/Glitched-React/messages" component={Messages} />
-                <Route exact path="/Glitched-React/admin" component={Admin} />
                 <Route exact path="/Glitched-React/" render={
                     (props) => (
                         <Login signInUser={signInUser} />

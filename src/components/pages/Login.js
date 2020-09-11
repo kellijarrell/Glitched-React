@@ -41,7 +41,7 @@ function Login(props) {
                             New User? Sign Up Here!</p>
                     </a>
                 </div>
-                <Link to = {"/Glitched-React/homepage"} >
+                <Link to = "/Glitched-React/" >
                 <button type="submit" className="btn btn-info" 
                 onClick={() => props.signInUser(email.current.value, password.current.value)} style={{ marginBottom: "20px" }}>
                     Login
