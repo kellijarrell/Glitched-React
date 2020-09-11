@@ -82,9 +82,6 @@ function App() {
     }, [currentUser])
     
     useEffect(() => {
-        console.log("Temp: ",tempInfo);
-        console.log("currentUser: ",currentUser);
-        console.log("currentUserInfo: ", currentUserInfo);
         if(currentUser === undefined) return;
         if(currentUserInfo.first_name !== null) {
             database.ref('zip/' + currentUserInfo.personal.zip + "/" + currentUserInfo.personal.gender + "/prefers_" + currentUserInfo.personal.preference + "/" + currentUser.uid).remove();
