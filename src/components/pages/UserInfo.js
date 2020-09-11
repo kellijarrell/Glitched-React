@@ -64,15 +64,16 @@ function UserInfo(props) {
         img
       )
     } else {
-      props.setUserInfo(
-        fname.current.value,
-        lname.current.value,
-        city.current.value,
-        state.current.value,
-        zip.current.value,
-        gender.current.value,
-        preference.current.value,
-        props.profile_picture)
+      props.setUserInfo({
+        fname: fname.current.value,
+        lname: lname.current.value,
+        city: city.current.value,
+        state: state.current.value,
+        zip: zip.current.value,
+        gender: gender.current.value,
+        preference: preference.current.value,
+        url: props.profile_picture
+      })
     }
   }
 

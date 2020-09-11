@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Homepage from "./components/pages/Homepage";
@@ -40,6 +40,7 @@ function App() {
 
     const [currentUser, setCurrentUser] = useState();
     const [currentUserInfo, setCurrentUserInfo] = useState({ first_name: null });
+    const [tempInfo, setTempInfo] = useState();
     const [currentUserLikes, setCurrentUserLikes] = useState({
         anime: false,
         videogames: false,
@@ -49,35 +50,66 @@ function App() {
     const [loginState, setLoginState] = useState("Welcome, please sign in.");
     
     const [startup, setStartup] = useState(false);
+
+    
+    
+    useEffect(() => {
+        if(currentUser === undefined) return;
+        const userId = currentUser.uid;
+        if (userId) {
+            database.ref('/users/' + userId).once('value').then(function (snapshot) {
+                const userData = snapshot.val();
+                if (userData === null) {
+                    // New user redirect
+                    initializeUser(currentUser.email)
+                    window.location.href = origin + "/userinfo";
+                } else {
+                    // Existing user redirect
+                    if (userData.personal) {
+                        if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) {
+                            setCurrentUserInfo(userData);
+                            if(userData.likes) {
+                                setCurrentUserLikes(userData.likes);
+                            }
+                            setLoginState("Signed in as " + userData.personal.first_name + " " + userData.personal.last_name);
+                        };
+                    } else {
+                        setLoginState("needs more info");
+                    }
+                }
+            });
+        }
+    }, [currentUser])
+    
+    useEffect(() => {
+        console.log("Temp: ",tempInfo);
+        console.log("currentUser: ",currentUser);
+        console.log("currentUserInfo: ", currentUserInfo);
+        if(currentUser === undefined) return;
+        if(currentUserInfo.first_name !== null) {
+            database.ref('zip/' + currentUserInfo.personal.zip + "/" + currentUserInfo.personal.gender + "/prefers_" + currentUserInfo.personal.preference + "/" + currentUser.uid).remove();
+        }
+        database.ref('users/' + currentUser.uid + "/personal/").set({
+            first_name: tempInfo.fname,
+            last_name: tempInfo.lname,
+            city: tempInfo.city,
+            state: tempInfo.state,
+            zip: tempInfo.zip,
+            gender: tempInfo.gender,
+            preference: tempInfo.preference,
+            profile_picture: tempInfo.url
+        });
+        database.ref('zip/' + tempInfo.zip + "/" + tempInfo.gender + "/prefers_" + tempInfo.preference + "/" + currentUser.uid).set({
+            id: currentUser.uid
+        });
+        window.location.href = window.location.origin + "/Glitched-React/";
+    }, [tempInfo])
+
     auth.onAuthStateChanged(function (user) {
         if(startup === true && user === auth.currentUser) return;
         setStartup(true);
         if (user) {            
             setCurrentUser(user);
-            const userId = user.uid;
-            if (userId) {
-                database.ref('/users/' + userId).once('value').then(function (snapshot) {
-                    const userData = snapshot.val();
-                    if (userData === null) {
-                        // New user redirect
-                        initializeUser(user.email)
-                        window.location.href = origin + "/userinfo";
-                    } else {
-                        // Existing user redirect
-                        if (userData.personal) {
-                            if (JSON.stringify(currentUserInfo) !== JSON.stringify(userData)) {
-                                setCurrentUserInfo(userData);
-                                if(userData.likes) {
-                                    setCurrentUserLikes(userData.likes);
-                                }
-                                setLoginState("Signed in as " + userData.personal.first_name + " " + userData.personal.last_name);
-                            };
-                        } else {
-                            setLoginState("needs more info");
-                        }
-                    }
-                });
-            }
         } else {
             // No user is signed in.
             console.log("FALSE", user);
@@ -97,29 +129,12 @@ function App() {
     }
 
     const initializeUser = (email) => {
+        console.log(currentUser)
         if (currentUser.uid) {
             database.ref('users/' + currentUser.uid).set({
                 email: email
             });
         }
-    }
-
-    const setUserInfo = (fname, lname, city, state, zip, gender, preference, url) => {
-        database.ref('zip/' + currentUserInfo.personal.zip + "/" + currentUserInfo.personal.gender + "/prefers_" + currentUserInfo.personal.preference + "/" + currentUser.uid).remove();
-        database.ref('users/' + currentUser.uid + "/personal/").set({
-            first_name: fname,
-            last_name: lname,
-            city: city,
-            state: state,
-            zip: zip,
-            gender: gender,
-            preference: preference,
-            profile_picture: url
-        });
-        database.ref('zip/' + zip + "/" + gender + "/prefers_" + preference + "/" + currentUser.uid).set({
-            id: currentUser.uid
-        });
-        window.location.href = window.location.origin + "/Glitched-React/";
     }
 
     const setUserLikes = (anime, videogames, comics, tabletop) => {
@@ -135,7 +150,7 @@ function App() {
         const ref = storageRef.child("users/" + currentUser.uid);
         ref.put(blob).then(function () {
             ref.getDownloadURL().then(function (url) {
-                setUserInfo(fname, lname, city, state, zip, gender, preference, url);
+                setTempInfo({fname: fname, lname: lname, city: city, state: state, zip: zip, gender: gender, preference: preference, url: url});
             });
         });
     }
@@ -178,7 +193,7 @@ function App() {
             <Router>
                 <Route exact path="/Glitched-React/" render={
                     (props) => (
-                        <UserInfo {...currentUserInfo.personal} {...currentUserLikes} storeBlob={storeBlob} setUserInfo={setUserInfo} setUserLikes={setUserLikes} />
+                        <UserInfo {...currentUserInfo.personal} {...currentUserLikes} storeBlob={storeBlob} setUserInfo={setTempInfo} setUserLikes={setUserLikes} />
                     )} />
                 <Route exact path="/Glitched-React/error" component={ErrorPage} />
             </Router>
@@ -196,7 +211,7 @@ function App() {
                     <Route exact path="/Glitched-React/error" component={ErrorPage} />
                     <Route exact path="/Glitched-React/userinfo" render={
                         (props) => (
-                            <UserInfo {...currentUserInfo.personal} {...currentUserLikes} storeBlob={storeBlob} setUserInfo={setUserInfo} setUserLikes={setUserLikes} />
+                            <UserInfo {...currentUserInfo.personal} {...currentUserLikes} storeBlob={storeBlob} setUserInfo={setTempInfo} setUserLikes={setUserLikes} />
                         )} />
                     <Route exact path="/Glitched-React/messages" component={Messages} />
                 </div>
