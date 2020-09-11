@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import DisplayImage from "../DisplayImage";
+import { Link } from "react-router-dom";
 
 function UserInfo(props) {
 
@@ -64,7 +65,7 @@ function UserInfo(props) {
       <div className="col-md-6 mb-3 mx-auto">
         <DisplayImage currentImg={props.profile_picture} setImg={setImg} ></DisplayImage>
       </div>
-      <form onSubmit={handleSubmit} style={{margin: "10px 20px 10px 20px"}}>
+      <form onSubmit={handleSubmit} style={{ margin: "10px 20px 10px 20px" }}>
         <div className="form-row">
           <div className="col-md-6 mb-3">
             <label htmlFor="validationDefault01">First name</label>
@@ -213,7 +214,9 @@ function UserInfo(props) {
             </select>
           </div>
         </div>
-        <button className="btn btn-info mx-auto">Confirm Info</button>
+        <Link to="/Glitched-React/">
+          <button className="btn btn-info mx-auto">Confirm Info</button>
+        </Link>
       </form>
     </div>
   )

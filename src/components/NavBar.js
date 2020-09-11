@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "./assets/images/glitched-logo.svg";
 
-function NavBar() {
+function NavBar(props) {
 
   const location = useLocation();
 
@@ -22,34 +22,36 @@ function NavBar() {
           alt="glitched"
         />
       </a>
-  
+
       <div
         className="collapse navbar-collapse"
         id="navbarNav">
         <ul className="navbar-nav ml-auto">
-
+        <span>{props.loginState}</span>
           <Link to="/Glitched-React/homepage" className={location.pathname === "/homepage" ? "nav-link active" : "nav-link"}>
             <i className="fas fa-home d-inline-block align-top" style={{ width: "30px", height: "30px" }}
 
             ></i>
 
-            </Link>
+          </Link>
 
-            {/* <Link to="/Glitched-React/messages" className={location.pathname === "/messages" ? "nav-link active" : "nav-link"}>
+          {/* <Link to="/Glitched-React/messages" className={location.pathname === "/messages" ? "nav-link active" : "nav-link"}>
               <i className="far fa-comments d-inline-block align-top" style={{ width: "30px", height: "30px" }}
 
               ></i>
 
             </Link> */}
 
-            <Link to="/Glitched-React/admin" className={location.pathname === "/admin" ? "nav-link active" : "nav-link"}>
-              <i className="far fa-user-circle d-inline-block align-top" style={{ width: "30px", height: "30px" }}></i>
-            </Link>
-
-            <Link to="/Glitched-React/admin" className={location.pathname === "/admin" ? "nav-link active" : "nav-link"}>
-              <i className="fas fa-sign-out-alt d-inline-block align-top" style={{ width: "30px", height: "30px" }}></i>
-            </Link>
-
+          <Link to="/Glitched-React/userinfo" className={location.pathname === "/userinfo" ? "nav-link active" : "nav-link"}>
+            <i className="far fa-user-circle d-inline-block align-top" style={{ width: "30px", height: "30px" }}></i>
+          </Link>
+          <Link to="/logout" className={location.pathname === "/logout" ? "nav-link active" : "nav-link"}>
+          <i
+            onClick={props.signOut}
+            className="fas fa-sign-out-alt d-inline-block align-top"
+            style={{ width: "30px", height: "30px" }}
+          ></i>
+          </Link>
         </ul>
       </div>
     </nav>
